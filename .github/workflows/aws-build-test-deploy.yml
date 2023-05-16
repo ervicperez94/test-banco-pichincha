@@ -1,0 +1,50 @@
+name: AWS Build-Test-Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build . -t challenge
+
+    - name: Push Docker image
+      run: |
+        echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
+        docker tag challenge:latest public.ecr.aws/b3h0q7i6/challenge:latest
+        docker push public.ecr.aws/b3h0q7i6/challenge:latest
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run tests
+      run: npm run test
+
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        helm repo add stable https://charts.helm.sh/stable
+
+    - name: Deploy to AWS
+      run: |
+        echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
+        helm upgrade --install my-app stable/nginx-ingress 
