@@ -35,3 +35,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 infra2/.terraform/
+infra2/.terraform/providers/registry.terraform.io/hashicorp/helm/*
+infra2/.terraform/providers/registry.terraform.io/hashicorp/kubernetes/*
+infra2/.terraform/providers/registry.terraform.io/hashicorp/aws/*
