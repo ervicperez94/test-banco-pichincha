@@ -59,17 +59,15 @@ $ npm run test:cov
 ```
 
 ## Terrform
+Posicionese en la carpeta infra:
 ```bash
-# unit tests
+$ terraform init
+
+$ terraform plan
+
 $ terraform apply
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
-Posicionese en la carpeta infra:
 
 
 ## Support
