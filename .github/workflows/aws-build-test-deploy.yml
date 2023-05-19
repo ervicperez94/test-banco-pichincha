@@ -17,7 +17,7 @@ jobs:
 
     - name: Push Docker image
       run: |
-        echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login -u secrets.AWS_USER --password-stdin https://public.ecr.aws/b3h0q7i6
+        echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
         docker tag challenge:latest public.ecr.aws/b3h0q7i6/challenge:latest
         docker push public.ecr.aws/b3h0q7i6/challenge:latest
 
