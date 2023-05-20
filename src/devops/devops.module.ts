@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { DevopsController } from './devops.controller';
 import { DevopsService } from './devops.service';
 
+@Global()
 @Module({
   controllers: [DevopsController],
   providers: [DevopsService],
+  exports: [DevopsService],
 })
 export class DevopsModule {}
