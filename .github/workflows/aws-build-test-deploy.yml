@@ -48,6 +48,9 @@ jobs:
         helm repo add stable https://charts.helm.sh/stable
 
     - name: Deploy to AWS
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
       run: |
-        echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
-        helm upgrade --install my-app stable/nginx-ingress 
+        echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
+        kubectl config use-context ${{ secrets.K8S_CONTEXT }}
+        helm upgrade --install my-app public.ecr.aws/b3h0q7i6/challenge:latest 
