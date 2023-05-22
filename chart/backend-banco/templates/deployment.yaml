@@ -3,9 +3,6 @@ kind: Deployment
 metadata:
   name: {{ include "backend.fullname" . }}
   labels:
-    tags.datadoghq.com/env: {{ .Release.Namespace }}
-    tags.datadoghq.com/service: {{ .Release.Service }}
-    tags.datadoghq.com/version: {{ .Chart.AppVersion }}
     {{- include "backend.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -20,10 +17,6 @@ spec:
   template:
     metadata:
       labels:
-        tags.datadoghq.com/env: {{ .Release.Namespace }}
-        tags.datadoghq.com/service: {{ .Release.Service }}
-        tags.datadoghq.com/version: {{ .Chart.AppVersion }}
-        admission.datadoghq.com/enabled: "true"
         {{- include "backend.selectorLabels" . | nindent 8 }}
       annotations:
         admission.datadoghq.com/nodejs-lib.version: v3.9.3
@@ -50,30 +43,3 @@ spec:
           - name: {{ .key }}
             value: {{ .value }}
           {{- end}}
-          - name: DD_ENV
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.labels['tags.datadoghq.com/env']
-          - name: DD_SERVICE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.labels['tags.datadoghq.com/service']
-          - name: DD_VERSION
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.labels['tags.datadoghq.com/version']
-          - name: DD_AGENT_HOST
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
-          - name: DD_LOGS_INJECTION
-            value: "true"
-#        livenessProbe:
-#          httpGet:
-#            path: /index
-#            port: http
-#        readinessProbe:
-#          httpGet:
-#            path: /index
-#            port: http
-
