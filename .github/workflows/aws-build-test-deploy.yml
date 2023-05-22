@@ -46,7 +46,12 @@ jobs:
       run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         helm repo add stable https://charts.helm.sh/stable
-
+    - name: Configure AWS credentials
+      run: |
+        echo "[default]" >> $HOME/.aws/credentials
+        echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $HOME/.aws/credentials
+        echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $HOME/.aws/credentials
+        echo "region=${{ secrets.AWS_REGION }}" >> $HOME/.aws/credentials
     - name: Deploy to AWS
       run: |
         # Crear el archivo kubeconfig
