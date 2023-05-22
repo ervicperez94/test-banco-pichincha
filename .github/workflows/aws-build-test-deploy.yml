@@ -55,6 +55,5 @@ jobs:
         mkdir -p $HOME/.kube/
         cp kubeconfig.yaml $HOME/.kube/config
         echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
-        cat kubeconfig.yaml
-        #Se imprime kubeconfig.yaml
+        kubectl config use-context ${{ secrets.K8S_CONTEXT }}
         helm upgrade --install my-app public.ecr.aws/b3h0q7i6/challenge:latest 
