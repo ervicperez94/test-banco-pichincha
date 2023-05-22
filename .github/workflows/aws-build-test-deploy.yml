@@ -50,7 +50,7 @@ jobs:
     - name: Deploy to AWS
       run: |
         # Crear el archivo kubeconfig
-        echo "${KUBECONFIG}" > kubeconfig.yaml
+        echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
         # Copiar el archivo kubeconfig a ~/.kube/
         mkdir -p $HOME/.kube/
         cp kubeconfig.yaml $HOME/.kube/config
