@@ -48,8 +48,6 @@ jobs:
         helm repo add stable https://charts.helm.sh/stable
 
     - name: Deploy to AWS
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
       run: |
         # Crear el archivo kubeconfig
         echo "${KUBECONFIG}" > kubeconfig.yaml
@@ -57,5 +55,6 @@ jobs:
         mkdir -p $HOME/.kube/
         cp kubeconfig.yaml $HOME/.kube/config
         echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
-        echo $KUBECONFIG
+        cat kubeconfig.yaml
+        #Se imprime kubeconfig.yaml
         helm upgrade --install my-app public.ecr.aws/b3h0q7i6/challenge:latest 
