@@ -1,0 +1,53 @@
+# Default values for backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# replicaCount Número de replicas
+replicaCount: 1
+
+image:
+  # image.repository repositorio donde se obtiene la imagen de Docker
+  repository: registry.gitlab.com/pullermx/essad/backend-banco/feature
+  # image.pullPolicy politica para traer la imagen
+  pullPolicy: always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: 'latest'
+
+container:
+  # container.config.name variable que tiene el nombre de la configuracion de las variables para postgres
+  config:
+    - name: postgres-config
+  # container.env variables de entorno para el contenedor
+  env:
+    - key: DB_SERVER
+      value: postgres
+
+# imagePullSecrets.name nombre de el elemento secrets que ayuda a contectarnos al registry de gitlab
+imagePullSecrets:
+  - name: registry-credentials
+nameOverride: ''
+fullnameOverride: ''
+
+service:
+  # service.type Tipo del servicio
+  type: ClusterIP
+  # service.port Puerto donde se expone la aplicación
+  port: 4000
+  # sevice.targetPort Puerto dentro del contenedor donde se expone la aplicación
+  targetPort: 3000
+
+tls: {}
+
+## Application level settings
+# appMode variable que indica el entorno
+appMode: development
+# certificatePath ubicación donde se guardará el certificado
+certificatePath: /etc/ssl/development
+# appURLLocation DNS donde responderá la aplicación
+appURLLocation: http://api.development-essad.puller.mx
+# appURLRedirect dominio o subdominio del host
+appURLRedirect: api.development-essad.puller.mx
+# databaseUser usuario de la base de datos
+databaseUser: development-user
+# databasePassword contraseña d la base de datos
+databasePassword: development-password

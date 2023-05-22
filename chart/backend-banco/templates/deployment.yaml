@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "backend.fullname" . }}
+  labels:
+    tags.datadoghq.com/env: {{ .Release.Namespace }}
+    tags.datadoghq.com/service: {{ .Release.Service }}
+    tags.datadoghq.com/version: {{ .Chart.AppVersion }}
+    {{- include "backend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      {{- include "backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        tags.datadoghq.com/env: {{ .Release.Namespace }}
+        tags.datadoghq.com/service: {{ .Release.Service }}
+        tags.datadoghq.com/version: {{ .Chart.AppVersion }}
+        admission.datadoghq.com/enabled: "true"
+        {{- include "backend.selectorLabels" . | nindent 8 }}
+      annotations:
+        admission.datadoghq.com/nodejs-lib.version: v3.9.3
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        ports:
+          - name: http
+            containerPort: {{ .Values.service.targetPort }}
+            hostPort: {{ .Values.service.port }}
+            protocol: TCP
+        envFrom:
+          {{- range .Values.container.config }}
+          - configMapRef:
+              name: {{ .name }}
+          {{- end }}
+        env:
+          {{- range .Values.container.env }}
+          - name: {{ .key }}
+            value: {{ .value }}
+          {{- end}}
+          - name: DD_ENV
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
+          - name: DD_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: DD_LOGS_INJECTION
+            value: "true"
+#        livenessProbe:
+#          httpGet:
+#            path: /index
+#            port: http
+#        readinessProbe:
+#          httpGet:
+#            path: /index
+#            port: http
+
