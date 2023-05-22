@@ -33,13 +33,3 @@ spec:
             containerPort: {{ .Values.service.targetPort }}
             hostPort: {{ .Values.service.port }}
             protocol: TCP
-        envFrom:
-          {{- range .Values.container.config }}
-          - configMapRef:
-              name: {{ .name }}
-          {{- end }}
-        env:
-          {{- range .Values.container.env }}
-          - name: {{ .key }}
-            value: {{ .value }}
-          {{- end}}
