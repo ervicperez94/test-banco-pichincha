@@ -60,7 +60,13 @@ jobs:
         # Copiar el archivo kubeconfig a ~/.kube/
         mkdir -p $HOME/.kube/
         cp kubeconfig.yaml $HOME/.kube/config
+
         echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
+
         export API_VERSION="$(grep "appVersion" chart/backend-banco/Chart.yaml | cut -d" " -f2)"
         export RELEASE_NAME="production"
-        helm upgrade --install ${RELEASE_NAME} chart/backend-banco --set tls.certData=${{ secrets.SSL_CRT }} --set tls.keyData=${{ secrets.SSL_KEY }} -n production -f chart/values-production.yaml
+
+        helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
+          --set tls.certData=${{ secrets.SSL_CRT }} \
+          --set tls.keyData=${{ secrets.SSL_KEY }} \
+          -n production -f chart/values-production.yaml
