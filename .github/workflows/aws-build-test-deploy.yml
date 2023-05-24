@@ -67,6 +67,6 @@ jobs:
         export RELEASE_NAME="production"
 
         helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
-          --set tls.certData=${{ secrets.SSL_CRT }} \
-          --set tls.keyData=${{ secrets.SSL_KEY }} \
+          --set-string tls.certData=${{ secrets.SSL_CRT }} \
+          --set-string tls.keyData=${{ secrets.SSL_KEY }} \
           -n production -f chart/values-production.yaml
