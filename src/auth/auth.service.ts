@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
+  private usedTokens: Set<string> = new Set<string>();
   constructor(private jwtService: JwtService) {}
 
   async login() {
@@ -10,5 +11,12 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+  async isTokenUsed(token: string): Promise<boolean> {
+    return this.usedTokens.has(token);
+  }
+
+  async markTokenAsUsed(token: string): Promise<void> {
+    this.usedTokens.add(token);
   }
 }
