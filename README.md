@@ -1,5 +1,5 @@
 
-# Nombre del Proyecto
+# Test pichincha
 
 Este proyecto es una aplicación web construida con NestJS y Docker, probada con Jest, y diseñada para ser desplegada en infraestructura gestionada con Terraform.
 
