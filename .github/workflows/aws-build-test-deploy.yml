@@ -69,7 +69,7 @@ jobs:
         export RELEASE_NAME="production"
 
         helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
-          --set tls.certData="${{ secrets.SSL_CERT }}" \
+          --set tls.certData="${{ secrets.SSL_CRT }}" \
           --set tls.keyData="${{ secrets.SSL_KEY }}" \
         -n production -f chart/values-production.yaml
 
@@ -109,6 +109,6 @@ jobs:
         export RELEASE_NAME="development"
 
         helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
-          --set tls.certData="${{ secrets.SSL_CERT }}" \
+          --set tls.certData="${{ secrets.SSL_CRT }}" \
           --set tls.keyData="${{ secrets.SSL_KEY }}" \
         -n development -f chart/values-development.yaml
