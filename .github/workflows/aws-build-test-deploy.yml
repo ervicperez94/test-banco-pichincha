@@ -18,7 +18,7 @@ jobs:
       run: echo "::set-output name=hash::$(git rev-parse HEAD)"
 
     - name: Build Docker image
-      run: docker build . -t challenge/development:${{ steps.commit_hash.outputs.hash }} -t challenge/development:latest
+      run: docker build . -t challenge:${{ steps.commit_hash.outputs.hash }} -t challenge:latest
 
     - name: Push Docker image
       run: |
