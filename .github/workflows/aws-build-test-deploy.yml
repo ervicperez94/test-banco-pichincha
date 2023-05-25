@@ -77,7 +77,7 @@ jobs:
     needs: [build, test]
     runs-on: ubuntu-latest
 
-    if: startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main'
+    if: "!startsWith(github.ref, 'refs/heads/main')"
 
     steps:
     - name: Checkout code
