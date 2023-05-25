@@ -34,9 +34,11 @@ jobs:
     - name: Run tests
       run: npm run test
 
-  deploy:
+  deploy-production:
     needs: [build, test]
     runs-on: ubuntu-latest
+
+    if: startsWith(github.ref, 'refs/heads/main')
 
     steps:
     - name: Checkout code
@@ -66,4 +68,47 @@ jobs:
         export API_VERSION="$(grep "appVersion" chart/backend-banco/Chart.yaml | cut -d" " -f2)"
         export RELEASE_NAME="production"
 
-        helm upgrade --install ${RELEASE_NAME} chart/backend-banco -n production -f chart/values-production.yaml
+        helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
+          --set tls.certData="${{ secrets.SSL_CERT }}" \
+          --set tls.keyData="${{ secrets.SSL_KEY }}" \
+        -n production -f chart/values-production.yaml
+
+  deploy-development:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+
+    if: startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Helm
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        helm repo add stable https://charts.helm.sh/stable
+
+    - name: Configure AWS credentials
+      run: |
+        mkdir -p $HOME/.aws
+        echo "[default]" >> $HOME/.aws/credentials
+        echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $HOME/.aws/credentials
+        echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $HOME/.aws/credentials
+        echo "region=${{ secrets.AWS_REGION }}" >> $HOME/.aws/credentials
+        
+    - name: Deploy to AWS
+      run: |
+        # Configuración de kubeconfig
+        echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+        mkdir -p $HOME/.kube/
+        cp kubeconfig.yaml $HOME/.kube/config
+
+        echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
+
+        export API_VERSION="$(grep "appVersion" chart/backend-banco/Chart.yaml | cut -d" " -f2)"
+        export RELEASE_NAME="development"
+
+        helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
+          --set tls.certData="${{ secrets.SSL_CERT }}" \
+          --set tls.keyData="${{ secrets.SSL_KEY }}" \
+        -n development -f chart/values-development.yaml
