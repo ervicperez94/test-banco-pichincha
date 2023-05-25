@@ -13,19 +13,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Get commit hash
-      id: commit_hash
-      run: echo "::set-output name=hash::$(git rev-parse HEAD)"
-
     - name: Build Docker image
-      run: docker build . -t challenge:${{ steps.commit_hash.outputs.hash }} -t challenge:latest
+      run: docker build . -t challenge:${{ github.sha }} -t challenge:latest
 
     - name: Push Docker image
       run: |
         echo ${{ secrets.AWS_LOGIN_PASSWORD }} | docker login -u AWS --password-stdin https://public.ecr.aws/b3h0q7i6
-        docker tag challenge:${{ steps.commit_hash.outputs.hash }} public.ecr.aws/b3h0q7i6/challenge:${{ steps.commit_hash.outputs.hash }}
+        docker tag challenge:${{ github.sha }} public.ecr.aws/b3h0q7i6/challenge:${{ github.sha }}
         docker tag challenge:latest public.ecr.aws/b3h0q7i6/challenge:latest
-        docker push public.ecr.aws/b3h0q7i6/challenge:${{ steps.commit_hash.outputs.hash }}
+        docker push public.ecr.aws/b3h0q7i6/challenge:${{ github.sha }}
         docker push public.ecr.aws/b3h0q7i6/challenge:latest
 
   test:
@@ -76,7 +72,7 @@ jobs:
         export RELEASE_NAME="production"
 
         helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
-          --set image.tag="${{ steps.commit_hash.outputs.hash }}" \
+          --set image.tag="${{ github.sha }}" \
           --set tls.certData="${{ secrets.SSL_CRT }}" \
           --set tls.keyData="${{ secrets.SSL_KEY }}" \
         -n production -f chart/values-production.yaml
@@ -117,7 +113,7 @@ jobs:
         export RELEASE_NAME="development"
 
         helm upgrade --install ${RELEASE_NAME} chart/backend-banco \
-          --set image.tag="${{ steps.commit_hash.outputs.hash }}" \
+          --set image.tag="${{ github.sha }}" \
           --set tls.certData="${{ secrets.SSL_CRT }}" \
           --set tls.keyData="${{ secrets.SSL_KEY }}" \
         -n development -f chart/values-development.yaml
