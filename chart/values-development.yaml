@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 # replicaCount Número de replicas
-replicaCount: 1
+replicaCount: 2
 
 image:
   # image.repository repositorio donde se obtiene la imagen de Docker
@@ -23,7 +23,7 @@ service:
   # service.type Tipo del servicio
   type: ClusterIP
   # service.port Puerto donde se expone la aplicación
-  port: 4001
+  port: 4000
   # sevice.targetPort Puerto dentro del contenedor donde se expone la aplicación
   targetPort: 3000
 

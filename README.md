@@ -1,85 +1,91 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Test pichincha
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este proyecto es una aplicación web construida con NestJS y Docker, probada con Jest, y diseñada para ser desplegada en infraestructura gestionada con Terraform.
 
-## Description
+## Pre-requisitos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Docker: Visita la [página de instalación de Docker](https://docs.docker.com/engine/install/) para obtener instrucciones sobre cómo instalar Docker en tu sistema operativo.
+- Node.js y npm: Necesitarás Node.js y npm para ejecutar el código de NestJS. Puedes descargarlos desde la [página oficial de Node.js](https://nodejs.org/).
+- Terraform: Visita la [página de descargas de Terraform](https://www.terraform.io/downloads.html) para obtener instrucciones sobre cómo instalar Terraform en tu sistema operativo.
 
-## Installation
+## Instalación
 
-```bash
-$ npm install
-```
+1. Clona el repositorio:
 
-## Running the app
+    ```
+    git clone https://github.com/ervicperez94/test-banco-pichincha.git
+    cd test-banco-pichincha
+    ```
 
-```bash
-# development
-$ npm run start
+2. Instala las dependencias de NestJS:
 
-# watch mode
-$ npm run start:dev
+    ```
+    npm install
+    ```
+## Ejecución
 
-# production mode
-$ npm run start:prod
-```
+1. Para ejecutar el servidor de desarrollo NestJS:
 
-## Test
+    ```
+    npm run start
+    ```
 
-```bash
-# unit tests
-$ npm run test
+2. Para construir y ejecutar la aplicación en un contenedor Docker:
 
-# e2e tests
-$ npm run test:e2e
+    ```
+    docker build -t nombre-de-tu-app .
+    docker run -p 3000:3000 nombre-de-tu-app
+    ```
 
-# test coverage
-$ npm run test:cov
-```
+## Uso
 
-## Terrform
-Posicionese en la carpeta infra:
-```bash
-$ terraform init
-
-$ terraform plan
-
-$ terraform apply
-
-```
+Una vez que la aplicación está en ejecución, puedes visitar `http://localhost:3000` en tu navegador para verla. Puedes interactuar con la API en `http://localhost:3000/api`.
 
 
-## Support
+Para producción visita [https://production-banco-pichincha.ervicperez.dev/](https://production-banco-pichincha.ervicperez.dev/) 
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Para para desarrollo visita [https://development-banco-pichincha.ervicperez.dev/](https://development-banco-pichincha.ervicperez.dev/) 
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+## Pruebas
 
-Nest is [MIT licensed](LICENSE).
+Para ejecutar las pruebas de la aplicación, ejecuta el siguiente comando:
+
+
+   ```
+    npm run test
+  ```
+
+## Despliegue con Terraform
+
+1. Inicializa Terraform en tu directorio de proyecto:
+
+    ```
+    terraform init
+    ```
+
+2. Verifica tu configuración de Terraform:
+
+    ```
+    terraform plan
+    ```
+
+3. Aplica tu configuración de Terraform para desplegar tu infraestructura:
+
+    ```
+    terraform apply
+    ```
+
+## Contribuciones
+
+Por favor, asegúrate de ejecutar las pruebas y confirmar que todas pasan antes de enviar cualquier solicitud de incorporación de cambios. Además, sigue las convenciones de código y estilo presentes en el código existente.
+
+## Licencia
+
+Este proyecto está licenciado bajo Apache License. Consulta el archivo `LICENSE` para más detalles.
+
+
+
+
