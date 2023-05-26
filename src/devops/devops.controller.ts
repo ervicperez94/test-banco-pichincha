@@ -7,8 +7,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { MessageResponseDto } from './message-response.dto';
-import { JwtTokenErrorResponseDto } from 'src/common/jwt-token-error-response.dto';
-import { ApiKeyErrorResponseDto } from 'src/common/api-key-error-response.dto';
+import { JwtTokenErrorResponseDto } from '../common/jwt-token-error-response.dto';
+import { ApiKeyErrorResponseDto } from '../common/api-key-error-response.dto';
+
 @Controller('devops')
 @ApiTags('devops')
 export class DevopsController {
